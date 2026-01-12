@@ -27,3 +27,5 @@ Thumbs.db
 
 # Database
 *.sqlite3
+frontend/node_modules/
+.gitignore

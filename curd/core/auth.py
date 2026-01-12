@@ -9,6 +9,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 def get_current_user(token:str = Depends(oauth2_scheme), db:Session = Depends(get_db)):
     try:
         payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+        print(payload,'Payload')
         user_id = payload.get("sub")
         if not user_id:
             raise HTTPException(401, "Invalid token")

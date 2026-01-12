@@ -7,7 +7,7 @@ class UserRegister(BaseModel):
     password:str
     phoneNumber:int
     gender:str
-    role: str
+    role: str = "user"
     status: int = 1
 class UserLogin(BaseModel):
     userName:str

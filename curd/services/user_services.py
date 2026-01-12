@@ -2,7 +2,7 @@ from fastapi import HTTPException,status
 from datetime import datetime, timedelta
 from schema.user import UserRegister,UserLogin
 from sqlalchemy.orm import Session
-from jose import jwt
+from jose import jwt,JWTError
 from core import has_password,verify_password
 from config import ACCESS_TOKEN_EXPIRE_MINUTES,REFRESH_TOKEN_EXPIRE_DAYS,ALGORITHM,SECRET_KEY
 from models import User
@@ -25,6 +25,7 @@ def register_user(data:UserRegister,db:Session):
     db.refresh(new_user)
     return new_user
 def loginUser(data:UserLogin,db:Session):
+    print(ACCESS_TOKEN_EXPIRE_MINUTES,'acc')
     user = db.query(User).filter(User.emailId == data.userName).first()
     if not user:
         raise HTTPException(
@@ -52,3 +53,10 @@ def create_refresh_token(data: dict):
     expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+def verify_token(token:str):
+    try:
+        return jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+    except JWTError:
+        return None
+
+
