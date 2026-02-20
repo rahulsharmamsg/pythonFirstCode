@@ -9,9 +9,12 @@ export const registerSchema  = z.object({
 })
 
 export type RegisterFormData = z.infer<typeof registerSchema>
+// End User Register validation schema 
 export type InputChangeEvent = React.ChangeEvent<
   HTMLInputElement | HTMLSelectElement
 >
+
+// Login Schema 
 export type LoginFormData = {
   userName: string;
   password: string;

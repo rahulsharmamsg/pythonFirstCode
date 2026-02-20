@@ -9,7 +9,7 @@ const AuthWatcher = () => {
     const token = getRefreshToken();
 
     useEffect(() => {
-        // Token Expire after Open Session Expire popup
+        // Refresh Token Expire after Open Session Expire popup
         if (!token) return
         const checkToken = () => {
             if (token && isTokenExpired(token)) {
@@ -21,7 +21,7 @@ const AuthWatcher = () => {
         return () => clearInterval(interval)
     }, [token])
     useEffect(() => {
-        // Token Expire after reload than redirect login page
+        // refresh Token Expire after reload than redirect login page
         if (!token) return
         const isToken = isTokenExpired(token)
         if (isToken) {

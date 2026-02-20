@@ -12,3 +12,14 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     userName:str
     password:str
+    
+class UserResponse(BaseModel):
+    id:int
+    userName:str
+    emailId:str
+    phoneNumber:int
+    gender:str
+    role: str
+    status: int
+    class Config():
+        orm_mode = True

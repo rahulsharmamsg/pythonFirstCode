@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from database import db_engine,Base
 from sqlalchemy import text
 from  models import User
-from api import userRouter
+from api import userRouter,adminRouter
+
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 origins = [
@@ -20,6 +21,7 @@ app.add_middleware(
 #Create all table from model.
 Base.metadata.create_all(bind=db_engine)
 app.include_router(userRouter)
+app.include_router(adminRouter,prefix="/admin")
 
 @app.on_event("startup")
 def startup_db_check():

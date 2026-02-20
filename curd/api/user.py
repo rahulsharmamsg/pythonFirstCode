@@ -2,13 +2,10 @@ from fastapi import APIRouter ,Depends, Header, status, HTTPException
 from schema.user import UserRegister,UserLogin
 from sqlalchemy.orm import Session
 from database import get_db
-from core import has_password,verify_password,get_current_user
-from models import User
+from core import check_current_user
 from services import register_user,loginUser,create_access_token,create_refresh_token,verify_token
+# Check User login and role user than access api
 router = APIRouter()
-@router.get('/')
-def get_user(auth_midd:User = Depends(get_current_user)):
-    return "User List"
 @router.post('/register',status_code=status.HTTP_201_CREATED)
 def userRegister(data:UserRegister, db:Session = Depends(get_db)):
     try:
@@ -18,10 +15,10 @@ def userRegister(data:UserRegister, db:Session = Depends(get_db)):
             "user_id":user.id
         }
     except HTTPException:
-        raise
-    except Exception as e:
         db.rollback()
-        print("ERROR:", e) 
+        raise
+    except Exception:
+        db.rollback()
         raise HTTPException(
             status_code = 500,
             detail = "Internal Server Error."
@@ -46,10 +43,10 @@ def userLogin(data:UserLogin,db:Session = Depends(get_db)):
             "refreshtoken": refreshToken
              }
     except HTTPException:
-        raise
-    except Exception as e:
         db.rollback()
-        print(e,'Error')
+        raise
+    except Exception:
+        db.rollback()
         raise HTTPException(
             status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail = "Internal Server Error."
